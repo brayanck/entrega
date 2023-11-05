@@ -58,7 +58,7 @@
   button.addEventListener("click", async() => {
       const cart =await obtenerCarrito();
 
-        fetch(`http://localhost:8080/api/create-payment-intent/${cart}`,{
+        fetch(`/api/create-payment-intent/${cart}`,{
           method: "POST",
         })
         .then(res=> {
@@ -71,10 +71,3 @@
 
 
 </script>
-{{!-- <script>
-  const linkCompra = document.querySelector(".link_comprar")
-  document.addEventListener('DOMContentLoaded', async() => {
-  const carrito = await obtenerCarrito();
-    linkCompra.href = `/api/carts/${carrito}/purchase`
-});
-</script> --}}
