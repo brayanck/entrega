@@ -17,7 +17,7 @@ messageForm.addEventListener("submit", async(e) => {
         message.value=""
         // Aquí puedes realizar acciones adicionales después de agregar el producto al carrito
     } catch (error) {
-        console.log('Error al agregar el producto al carrito:', error);
+        console.log('Error al agregar un mensaje');
     }
 
 

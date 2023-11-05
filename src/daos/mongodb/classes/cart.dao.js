@@ -7,7 +7,6 @@ class Cart {
             await newCart.save();
             return newCart;
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -15,7 +14,6 @@ class Cart {
         try {
             return await cartModel.findOne({ _id: id });
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -27,7 +25,6 @@ class Cart {
                 { new: true }
             );
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -38,7 +35,6 @@ class Cart {
                 { $set: { cart: [] } }
             );
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -50,7 +46,6 @@ class Cart {
                 { new: true }
             );
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -62,7 +57,6 @@ class Cart {
                 { new: true }
             );
         } catch (err) {
-            console.log(err);
             return null;
         }
     };

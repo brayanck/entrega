@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
 const UserGit = require('../daos/mongodb/models/userGit.model')
 const { createHash, isValidPassword } = require('../utils/bcrypts')
-const { CLIENTID, CLIENTSECRET, ADMIN_EMAIL, ADMIN_PASSWORD } = require('./config')
+const { CLIENTID, CLIENTSECRET, ADMIN_EMAIL, ADMIN_PASSWORD, SERVER_URL } = require('./config')
 const { cartServices, userServices } = require('../daos/repositorys/index')
 const fs = require('fs');
 const initializePassport = () => {
@@ -38,7 +38,6 @@ const initializePassport = () => {
                         name:`${result._id}`,
                         reference:userFolder
                     }
-                    console.log(agregar)
                     let upsate= await userServices.pushdocuments(result._id,agregar)
                     done(null, result);
                 } catch (err) {
@@ -116,7 +115,7 @@ const initializePassport = () => {
             {
                 clientID: CLIENTID,
                 clientSecret: CLIENTSECRET,
-                callbackURL: "http://localhost:8080/api/users/github/callback",
+                callbackURL: `${SERVER_URL}/api/users/github/callback`,
             },
             async (accessToken, refreshToken, profile, done) => {
                 UserGit.findOne({ githubId: profile.id }).then((data, err) => {

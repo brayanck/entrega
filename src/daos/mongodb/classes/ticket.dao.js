@@ -5,7 +5,6 @@ class Ticket{
         try {
             return await TicketModel.create(Data);
         } catch (err) {
-            console.log(err);
             return null;
         }
     };

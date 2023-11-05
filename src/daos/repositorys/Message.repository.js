@@ -7,7 +7,7 @@ class MessageRepository {
         try {
             return await this.dao.getAllMessages()
         } catch (err) {
-            console.log(err);
+             ;
             return null;
         }
     }
@@ -15,7 +15,6 @@ class MessageRepository {
         try {
           let newMsg = await this.dao.createMessage(objeto)
         } catch (err) {
-          console.log(err);
           return null;
         }
       };

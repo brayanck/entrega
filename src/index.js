@@ -30,6 +30,7 @@ const chatRouter = require("./routes/message.routes")(io)
 const productsRouter = require("./routes/products.routes")
 const cartRoutes = require('./routes/carts.routes')
 const perfilRoutes = require("./routes/perfil.routes")
+const paymentRouter =require('./routes/payment.routes')
 
 
 // uso
@@ -81,8 +82,7 @@ app.use("/api/carts",cartRoutes)
 app.use("/api/perfil",perfilRoutes)
 app.use("/api/product",productsRouter)
 app.use("/api/chat",chatRouter)
-const test = require('./routes/test.routes')
-app.use("/loggerTest",test)
+app.use("/api/create-payment-intent",paymentRouter)
 
 app.get("*", (req, res) => {
     res.status(404).render("error404",{})

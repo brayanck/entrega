@@ -2,8 +2,10 @@ const { generateResetToken } = require("../config/refreshToken");
 const sendEmail = require("./email.controler");
 const { createHash, isValidPassword } = require("../utils/bcrypts");
 const { userServices } = require("../daos/repositorys/index");
+const Front = require('../daos/dto/front.dto')
 const fs = require("fs");
-const path = require("path");
+const path = require('path')
+const {SERVER_URL} =require('../config/config')
 const renderRegisterControllers = (req, res) => {
   res.render("register", {});
 };
@@ -13,7 +15,6 @@ const renderLoginControllers = (req, res) => {
 const logoutControllers = async (req, res) => {
   const usuarioEmail = req.user.email;
   const usuario = await userServices.getUserByEmail(usuarioEmail);
-  console.log(usuario);
   await userServices.updateUser((usuario._id, { last_connection: new Date() }));
   req.logOut(() => { });
   res.clearCookie("connect.sid");
@@ -39,7 +40,7 @@ const resetPaaword = async (req, res) => {
       resetToket: token,
     };
     const update = await userServices.updateUser({ _id: user._id }, pass);
-    const resetLink = `http://localhost:8080/api/users/cambiar-password?token=${token}`;
+    const resetLink = `${SERVER_URL}/api/users/cambiar-password?token=${token}`;
     const toData = {
       to: email,
       Text: "hey user",
@@ -49,7 +50,6 @@ const resetPaaword = async (req, res) => {
     sendEmail(toData);
     res.redirect("/api/users/login");
   } catch (err) {
-    console.log(err);
     res.json(err);
   }
 };
@@ -62,7 +62,7 @@ const cambioContraseña = async (req, res) => {
   const isMatch = isValidPassword(user, newPassword);
   if (isMatch) {
     return res.redirect(
-      `http://localhost:8080/api/users/cambiar-password?token=${tokenWithTimestamp}`
+      `${SERVER_URL}/api/users/cambiar-password?token=${tokenWithTimestamp}`
     );
   }
   if (currentTime <= Number(expirationTime)) {
@@ -139,11 +139,7 @@ const buscarUserIdController = async (req, res) => {
 const getAllUsersController = async (req, res) => {
   try {
     const users = await userServices.getAllUsers();
-    const allUsers = users.map((objeto) => ({
-      name: objeto.first_name,
-      email: objeto.email,
-      role: objeto.role,
-    }));
+    const allUsers = users.map((objeto) => new Front(objeto));
     res.render("users", { allUsers });
   } catch (error) {
     req.logger.warn("Error al obtener los usuarios:", error);
@@ -162,12 +158,9 @@ const eliminarUsuario = async (req, res) => {
 };
 const asignarRole = async (req, res) => {
   try {
-    console.log("hola");
     const { email, role } = req.body;
-    console.log(email, role);
     const user = await userServices.getUserByEmail(email);
     const update = await userServices.updateUser(user._id, { role: role });
-    console.log(update);
     res.json("update");
   } catch (error) {
     req.logger.warn("Error al cambiar rol:", error);
@@ -180,10 +173,8 @@ const limpiarUsuarios = async (req, res) => {
     const users = await userServices.getAllUsers();
     users.forEach(async (user) => {
       const fechaActual = new Date();
-      const fechaLimite = new Date(fechaActual - 1000 * 60 * 2);
-      console.log(fechaLimite, new Date(user.last_connection));
+      const fechaLimite = new Date(fechaActual - 1000 * 60 * 60 * 24 * 2);
       if (new Date(user.last_connection) < fechaLimite) {
-        console.log("hola");
         await userServices.deleteUser(user.email);
         const toData = {
           to: user.email,
@@ -200,6 +191,17 @@ const limpiarUsuarios = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+const obtenerUser =(req,res)=>{
+  res.json(req.user);
+}
+const carpetaExist =(req, res) => {
+  // Verificar si la carpeta del usuario existe antes de cargar la vista
+  const userId = req.params.id;
+  const userDir = path.join(__dirname, '..', 'archivos', 'users', userId); // Usa path.join para construir rutas
+  const folderExists = fs.existsSync(userDir);
+
+  res.render('uploadArchivos', { userId, folderExists });
+}
 module.exports = {
   renderRegisterControllers,
   renderLoginControllers,
@@ -214,4 +216,6 @@ module.exports = {
   eliminarUsuario,
   asignarRole,
   limpiarUsuarios,
+  obtenerUser,
+  carpetaExist
 };

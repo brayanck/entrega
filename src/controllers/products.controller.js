@@ -49,7 +49,6 @@ const guardarProductController = async (req, res, next) => {
 
 
     const savedProduct = await productServices.createProduct(data);
-    console.log(savedProduct)
     res.redirect("/api/product/admin");
   } catch (err) {
     // Maneja el error personalizado aquí
@@ -73,7 +72,6 @@ const eliminarProductoController = async (req, res) => {
     }
     if (req.user.role === "admin") { // Corregido el uso de ===
       const deletedProduct = await productServices.deleteProduct(id);
-      console.log(deletedProduct)
       res.json(deletedProduct);
     }else{
       if (req.user.role === "premium") { // Corregido el uso de ===

@@ -22,6 +22,7 @@ const CartsSchema = new mongoose.Schema({
 });
 
 CartsSchema.pre('findOne', function (next) {
+
   this.populate('cart.product');
   next();
 });

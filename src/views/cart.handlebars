@@ -16,6 +16,7 @@
         <a class="nav-link" href="/api/users/subida">subir imagenes</a>
         <a class="nav-link documentacion" href="#">subir documentacion</a>
         <a class="nav-link cambio" href="#">cambio de rol</a>
+                <a class="nav-link cambio" href="/api/users">admin superior</a>
       </div>
     </div>
   </div>
@@ -46,14 +47,34 @@
 
 <div class="container d-flex justify-content-center align-items-center">
   <div>
-    <button class="btn btn-primary"><a class="btn-link link-light link_comprar" href="#">comprar</a></button>
+    <button class="btn btn-primary comprar">comprar</button>
   </div>
 </div>
+
+
 <script src="/index.js"></script>
 <script>
+  const button = document.querySelector('.comprar')
+  button.addEventListener("click", async() => {
+      const cart =await obtenerCarrito();
+
+        fetch(`http://localhost:8080/api/create-payment-intent/${cart}`,{
+          method: "POST",
+        })
+        .then(res=> {
+                if (res.ok) return res.json() 
+                return res.json().then(json =>Promise.reject(json))
+        })
+        .then(({ url }) => { window.location = url })
+        .catch(e => { console.error(e.error) })
+    })
+
+
+</script>
+{{!-- <script>
   const linkCompra = document.querySelector(".link_comprar")
   document.addEventListener('DOMContentLoaded', async() => {
   const carrito = await obtenerCarrito();
     linkCompra.href = `/api/carts/${carrito}/purchase`
 });
-</script>
+</script> --}}

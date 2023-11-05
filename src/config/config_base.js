@@ -51,8 +51,6 @@ const addLogger = (req, res, next) => {
    
   } else {
     req.logger = devLogger;
-    
-
   }
 
   next();

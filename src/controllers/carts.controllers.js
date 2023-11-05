@@ -58,7 +58,7 @@ const eliminarCarroController = async (req, res) => {
 };
 const actualizarCarroController = async (req, res) => {
   try {
-    const count = req.body.count;
+    const count = parseInt(req.body.count);
     const carrito = req.params.cid;
     const producto = req.params.pid;
     const carro = await cartServices.getCartById(carrito);
@@ -67,27 +67,31 @@ const actualizarCarroController = async (req, res) => {
     if (user._id.equals(product.owner)) {
       return res.json("No puedes agregar tu propio producto al carrito");
     }
-
     if (carro && product ) {
       const cartItem = carro.cart.find((item) => {
         if (item.product._id.toString() === producto.toString()) {
           return true;
         }
       });
-      if (cartItem) {
-        const updatedCart = await cartServices.actualizarCantidadCart(
+      if (cartItem ) {
+        if(cartItem.count+count<product.stock){
+          const updatedCart = await cartServices.actualizarCantidadCart(
           carrito,
           product,
           count
         );
-        return res.json(updatedCart);
+        return res.json({"message":"se actualizo la cantidad del carrito","peyload":updatedCart});
+        }else{
+          return res.json({"message":"no hay suficiente stock para el producto"})
+        }
+        
       } else {
         const updatedCart = await cartServices.pushProductToCart(
           carrito,
           product._id,
           count
         );
-        return res.json(updatedCart);
+        return res.json({"message":"se introdujo el producto al carrito","peyload":updatedCart});
       }
     } else {
       res.json("El producto o el carrito no existen");
@@ -119,7 +123,7 @@ const comprar = async (req, res) => {
           return res.status(500).json("Error al actualizar el producto");
         }
         await cartServices.eliminarProductDelCart(carritoId, product.id);
-        total += product.product.price;
+        total += product.product.price*product.count;
       } else {
         descarte.push(product);
       }

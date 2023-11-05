@@ -12,7 +12,7 @@ class ManagerDb{
             })
             console.log("conecxion exitosa")
         } catch (err) {
-            console.log(err)
+             console.log(err)
         }
         
     }

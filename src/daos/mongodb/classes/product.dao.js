@@ -4,7 +4,6 @@ class Product {
         try {
             return await ProductModel.findOne({ _id: idProducto });
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -12,7 +11,6 @@ class Product {
         try {
             return await ProductModel.findByIdAndDelete(idProducto)
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -20,7 +18,6 @@ class Product {
         try {
             return await ProductModel.create(Data);
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -32,7 +29,6 @@ class Product {
                 sort: sort,
             });
         } catch (err) {
-            console.log(err);
             return null;
         }
     };
@@ -47,7 +43,6 @@ class Product {
             );
             return updateProduct; // Devuelve el producto actualizado en lugar de usar res.json()
         } catch (err) {
-            console.log(err);
             return null;
         }
     };

@@ -12,7 +12,6 @@ module.exports = function (io) {
         res.render("chat", {})
     });
     io.on("connection", async (socket) => {
-        console.log("new email connected");
         const emitMessage = async () => {
             const messages =await messageServices.getAllMessages();
             const projectMessages = messages.map((msg) => {
@@ -39,7 +38,7 @@ module.exports = function (io) {
         });
 
         socket.on('disconnect', (data) => {
-            console.log("email disconet")
+
         })
 
     });

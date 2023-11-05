@@ -9,7 +9,6 @@ program
 .option('--mode <mode>', 'Modo de trabajo','develop')
 program.parse()
 
-console.log("mode option ", program.opts().mode)
 const environment = program.opts().mode
 dotenv.config({
     path:environment==="production"?"./src/config/.env.production":"./src/config/.env.development"
@@ -23,5 +22,9 @@ module.exports = {
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     MAIL_ID:process.env.MAIL_ID,
     MP: process.env.MP,
+    SECRET_STRIP:process.env.SECRET_STRIP,
+    PUBLIC_STRIP:process.env.PUBLIC_STRIP,
+    SERVER_URL:process.env.SERVER_URL,
     environment:environment
+    
 };

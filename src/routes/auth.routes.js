@@ -1,9 +1,8 @@
 const router = require("express").Router();
 const passport = require("passport");
-const {limpiarUsuarios, renderRegisterControllers,asignarRole,eliminarUsuario, renderLoginControllers,getAllUsersController, logoutControllers,resetPaaword,cambioContraseña,resetPaawordRender,resetPaawordFormRender, cambiarRole,buscarUserIdController} = require('../controllers/auth.controllers')
-const fs = require('fs');
+const{isAuthenticatedAdmin,isAuthenticatedAorP}=require('../utils/auth')
+const {carpetaExist,obtenerUser,limpiarUsuarios, renderRegisterControllers,asignarRole,eliminarUsuario, renderLoginControllers,getAllUsersController, logoutControllers,resetPaaword,cambioContraseña,resetPaawordRender,resetPaawordFormRender, cambiarRole,buscarUserIdController} = require('../controllers/auth.controllers')
 const { documentUpload,upload } = require('../utils/multer');
-const path = require('path'); // Asegúrate de importar el módulo 'path'
 
 
 router.get("/cambiar-password",resetPaawordFormRender)
@@ -34,22 +33,12 @@ router.get('/github/callback', passport.authenticate('github', {
     successRedirect: "/api/perfil",
     failureRedirect: '/'
 }));
-router.get('/user', (req,res)=>{
-    res.json(req.user);
-})
+router.get('/user', obtenerUser)
 
 router.get("/premium/:id", cambiarRole)
 router.get("/buscarId",buscarUserIdController)
 
-router.get('/:id/documents', (req, res) => {
-    // Verificar si la carpeta del usuario existe antes de cargar la vista
-    const userId = req.params.id;
-    const userDir = path.join(__dirname, '..', 'archivos', 'users', userId); // Usa path.join para construir rutas
-    const folderExists = fs.existsSync(userDir);
-    console.log(folderExists, userId);
-
-    res.render('uploadArchivos', { userId, folderExists });
-});
+router.get('/:id/documents', carpetaExist);
 
 // Ruta para cargar documentos del usuario por su ID
 router.post('/:id/documents', documentUpload.fields([
@@ -69,14 +58,14 @@ router.post('/subida', upload.fields([
   // El middleware de Multer ya habrá guardado los archivos en las carpetas correspondientes
   res.send("imagen subida"); // Renderiza la vista upload.hbs
 });
-router.get('/subida', (req, res) => {
-  // El middleware de Multer ya habrá guardado los archivos en las carpetas correspondientes
-  res.render('subida'); // Renderiza la vista upload.hbs
+
+router.get('/subida',isAuthenticatedAorP, (req, res) => {
+  res.render('subida');
 });
 
 
-router.get("/",getAllUsersController)
-router.delete("/eliminar",eliminarUsuario)
-router.put("/asignar",asignarRole)
-router.delete("/limpiar",limpiarUsuarios)
+router.get("/",isAuthenticatedAdmin,getAllUsersController)
+router.delete("/eliminar",isAuthenticatedAdmin,eliminarUsuario)
+router.put("/asignar",isAuthenticatedAdmin,asignarRole)
+router.delete("/limpiar",isAuthenticatedAdmin,limpiarUsuarios)
 module.exports = router

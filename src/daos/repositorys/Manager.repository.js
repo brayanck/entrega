@@ -8,7 +8,7 @@ class ManagerRepository{
             await this.dao.conectarse
             console.log("conecxion exitosa")
         } catch (err) {
-            console.log(err)
+             console.log(err)
         }
         
     }

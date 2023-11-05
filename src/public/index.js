@@ -11,7 +11,6 @@ const obtenerUserId = async()=>{
   
     return usuario;
   } catch (error) {
-    console.error('Error al obtener el usuario:', error);
     return null;
   }
 }
@@ -26,7 +25,6 @@ const obtenerUserId = async()=>{
   
     return carrito;
   } catch (error) {
-    console.error('Error al obtener el carrito:', error);
     return null;
   }
 }

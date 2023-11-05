@@ -25,7 +25,7 @@ helpers.isAuthenticatedAorP=(req, res, next)=> {
     if (req.user.role=="premium" || req.user.role=="admin") {
         return next()
     } else {
-        console.log("hola")
+
         res.redirect('/api/perfil');
     }
 }

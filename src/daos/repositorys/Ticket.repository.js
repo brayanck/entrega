@@ -6,7 +6,7 @@ class TicketRepository {
         try {
             return await this.dao.saveTiket(Data);
         } catch (err) {
-            console.log(err);
+             ;
             return null;
         }
     };

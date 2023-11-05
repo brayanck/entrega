@@ -4,7 +4,7 @@ class Message {
     try {
       return await MessageModel.find({});
     } catch (err) {
-      console.log(err);
+       ;
       return null;
     }
   };
@@ -14,7 +14,6 @@ class Message {
         await newMsg.save();
         return newMsg; // Devolver el objeto guardado
     } catch (err) {
-        console.log(err);
         return null;
     }
 };
