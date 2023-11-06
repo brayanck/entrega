@@ -10,5 +10,6 @@ module.exports = (error, req, res, next) => {
             break;
         default:
             res.status(500).send({ status: "error", error: error.message });
+            break;
     }
 };
