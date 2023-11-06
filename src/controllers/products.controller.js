@@ -190,7 +190,7 @@ const paginateAdmin = async (req, res) => {
           products.nextLink = products.nextLink + `&order=${req.query.order}`;
           products.prevLink = products.prevLink + `&order=${req.query.order}`;
       }
-      res.render("products", { products });
+      res.render("Products", { products });
   } catch (err) {
       req.logger.warn(err);
       return res.status(500).json({ error: 'Internal server error' });
