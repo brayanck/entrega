@@ -9,6 +9,6 @@ module.exports = (error, req, res, next) => {
             res.status(400).send({ status: 'Error', error: error.message })
             break;
         default:
-            res.status(500).send({ status: "error", error: "Unhandled error!" });
+            res.status(500).send({ status: "error", error: error.message });
     }
 };
