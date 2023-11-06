@@ -4,7 +4,6 @@ const { eliminarProductoController,paginateAdmin, actualizarProductController,  
 const { isAuthenticatedAorP, isAuthenticated } = require('../utils/auth');
 const errorHadler = require('../middlewares/index.js');
 
-router.get('/admin',isAuthenticatedAorP,paginateAdmin);
 // Las rutas que requieren autenticación pero no están relacionadas con administradores
 router.use(isAuthenticated);
 // Rutas públicas
@@ -17,8 +16,7 @@ router.use(isAuthenticatedAorP);
 router.post('/', guardarProductController);
 router.delete('/:pid', eliminarProductoController);
 router.put('/:pid', actualizarProductController);
-
-
+router.get('/admin',paginateAdmin);
 
 // Middleware para manejar errores
 router.use(errorHadler)
